@@ -24,9 +24,10 @@ const seedUser = async () => {
             const hashedPassword = await bcrypt.hash("N.Sanjay@2005", 10);
             await User.create({
                 username: "sanjayn29",
+                email: "sanjayn29@example.com",
                 password: hashedPassword,
                 name: "Sanjay",
-                age: 20
+                dob: new Date("2005-01-01")
             });
             console.log("Default user created: sanjayn29");
         }
@@ -36,13 +37,39 @@ const seedUser = async () => {
 };
 seedUser();
 
+app.post("/register", async (req, res) => {
+    try {
+        const { username, password, email, dob } = req.body;
+
+        // Check if user exists
+        const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ message: "Username or Email already exists" });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const user = await User.create({
+            username,
+            password: hashedPassword,
+            email,
+            name: username, // Default name to username
+            dob // Optional
+        });
+
+        res.status(201).json({ message: "User registered successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error registering user", error: error.message });
+    }
+});
+
+
 app.post("/login", async (req, res) => {
     try {
         const { username, password } = req.body;
         const user = await User.findOne({ username });
 
         if (!user) {
-            return res.status(400).json({ message: "Invalid username or password" });  
+            return res.status(400).json({ message: "Invalid username or password" });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
@@ -84,12 +111,12 @@ app.get("/users/:id", async (req, res) => {
 // Create new user
 app.post("/users", async (req, res) => {
     try {
-        const { name, age } = req.body;
+        const { name, dob } = req.body;
         // Auto-generate credentials for basic CRUD usage
         const username = name.toLowerCase().replace(/\s/g, '') + Math.floor(Math.random() * 10000);
         const password = await bcrypt.hash("123456", 10);
 
-        const newUser = await User.create({ name, age, username, password });
+        const newUser = await User.create({ name, dob, username, password });
         res.status(201).json(newUser);
     } catch (error) {
         res.status(400).json({ message: error.message });

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -58,6 +58,10 @@ const Login = () => {
                 <button type="submit" disabled={loading}>
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
+
+                <p style={{ marginTop: '10px', textAlign: 'center' }}>
+                    Don't have an account? <Link to="/signup">Sign up</Link>
+                </p>
             </form>
         </div>
     );

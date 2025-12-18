@@ -63,7 +63,7 @@ const Dashboard = () => {
                     <tr style={{ background: '#f3f4f6' }}>
                         <th style={{ padding: '10px', border: '1px solid #ddd' }}>ID</th>
                         <th style={{ padding: '10px', border: '1px solid #ddd' }}>Name</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>Age</th>
+                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>DOB</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,7 +71,9 @@ const Dashboard = () => {
                         <tr key={user.id || user._id}>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.id || user._id}</td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name}</td>
-                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.age}</td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>
+                                {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}
+                            </td>
                         </tr>
                     ))}
                 </tbody>
