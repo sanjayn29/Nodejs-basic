@@ -48,39 +48,76 @@ const Dashboard = () => {
     if (loading) return <div>Loading...</div>;
 
     return (
-        <div style={{ padding: '20px' }}>
-            <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h1>Admin Dashboard</h1>
-                <div>
-                    <button onClick={() => navigate('/home')} style={{ marginRight: '10px', padding: '8px 16px', background: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>My Tasks</button>
-                    <button onClick={handleLogout} style={{ padding: '8px 16px', background: '#dc2626', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Logout</button>
-                </div>
-            </nav>
-            <h3>{message}</h3>
+        <div className="min-h-screen bg-gray-50 p-6 md:p-10">
+            <div className="max-w-7xl mx-auto">
+                <nav className="flex justify-between items-center mb-10 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Admin Dashboard</h1>
+                    <div className="flex gap-4">
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
+                        >
+                            My Tasks
+                        </button>
+                        <button
+                            onClick={handleLogout}
+                            className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors shadow-sm"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </nav>
 
-            <h2 style={{ marginTop: '20px' }}>User List</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
-                <thead>
-                    <tr style={{ background: '#5983d7ff' }}>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>ID</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>Name</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>Email</th>
-                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>DOB</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {users.map(user => (
-                        <tr key={user.id || user._id}>
-                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.id || user._id}</td>
-                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name}</td>
-                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email}</td>
-                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>
-                                {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                {message && (
+                    <div className="mb-8 p-4 bg-blue-50 text-blue-700 rounded-lg border border-blue-100 font-medium">
+                        {message}
+                    </div>
+                )}
+
+                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                    <div className="p-6 border-b border-gray-100 bg-gray-50">
+                        <h2 className="text-xl font-bold text-gray-800">Registered Users</h2>
+                    </div>
+
+                    <div className="overflow-x-auto">
+                        <table className="w-full">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">DOB</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                                {users.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="4" className="px-6 py-10 text-center text-gray-400">
+                                            No users found.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    users.map(user => (
+                                        <tr key={user.id || user._id} className="hover:bg-gray-50 transition-colors">
+                                            <td className="px-6 py-4 text-sm text-gray-500 font-mono text-xs">{user.id || user._id}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-800 font-medium flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
+                                                    {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                                                </div>
+                                                {user.name}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
+                                            <td className="px-6 py-4 text-sm text-gray-600">
+                                                {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
