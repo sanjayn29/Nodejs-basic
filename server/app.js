@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 const SECRET_KEY = "my_secret_key_123";
 
-const seedUser = async () => {
+export const seedUser = async () => {
     try {
         const hashedPassword = await bcrypt.hash("N.Sanjay@2005", 10);
         await User.findOneAndUpdate(
@@ -37,7 +37,6 @@ const seedUser = async () => {
         console.error("Error seeding user:", err);
     }
 };
-seedUser();
 
 app.post("/register", async (req, res) => {
     try {

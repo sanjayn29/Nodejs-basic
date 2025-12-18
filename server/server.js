@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
-import app from './app.js';
+import app, { seedUser } from './app.js';
 
 mongoose.connect('mongodb://localhost:27017/User')
-  .then(() => console.log('Connected to MongoDB'))
+  .then(() => {
+    console.log('Connected to MongoDB');
+    seedUser();
+  })
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
 const PORT = 3000;
