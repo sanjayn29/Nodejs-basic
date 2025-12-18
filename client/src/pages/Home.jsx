@@ -50,11 +50,25 @@ const Home = () => {
         }
     };
 
+    const handleDelete = async (id) => {
+        const token = localStorage.getItem('token');
+        if (!confirm("Are you sure you want to delete this task?")) return;
+        try {
+            await axios.delete(`http://localhost:3000/todos/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            fetchTodos();
+        } catch (err) {
+            console.error(err);
+            alert('Error deleting task');
+        }
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>My Tasks</h2>
-                <button onClick={() => navigate('/dashboard')} style={{ padding: '8px', cursor: 'pointer' }}>Back to Dashboard</button>
+                <button onClick={() => navigate('/dashboard')} style={{ padding: '8px', cursor: 'pointer' }}>Admin Dashboard</button>
             </div>
 
             <form onSubmit={handleSubmit} style={{
@@ -95,6 +109,7 @@ const Home = () => {
                         <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Priority</th>
                         <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Due Date</th>
                         <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Notes</th>
+                        <th style={{ padding: '10px', borderBottom: '1px solid #ddd' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,6 +120,21 @@ const Home = () => {
                             <td style={{ padding: '10px' }}>{todo.priority}</td>
                             <td style={{ padding: '10px' }}>{todo.dueDate ? new Date(todo.dueDate).toLocaleDateString() : '-'}</td>
                             <td style={{ padding: '10px' }}>{todo.notes}</td>
+                            <td style={{ padding: '10px' }}>
+                                <button
+                                    onClick={() => handleDelete(todo._id)}
+                                    style={{
+                                        padding: '5px 10px',
+                                        background: '#dc2626',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '4px',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

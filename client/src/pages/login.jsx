@@ -25,7 +25,7 @@ const Login = () => {
             // localStorage.setItem('user', JSON.stringify(response.data.user)); // Backend doesn't return user object yet, just token/message
 
             // Redirect to dashboard or home
-            navigate('/dashboard');
+            navigate('/home');
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
         } finally {

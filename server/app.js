@@ -195,4 +195,19 @@ app.post("/todos", async (req, res) => {
     }
 });
 
+// Delete Todo
+app.delete("/todos/:id", async (req, res) => {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
+    const token = authHeader.split(" ")[1];
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const todo = await Todo.findOneAndDelete({ _id: req.params.id, email: decoded.email });
+        if (!todo) return res.status(404).json({ message: "Todo not found or unauthorized" });
+        res.json({ message: "Todo deleted" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 export default app;
