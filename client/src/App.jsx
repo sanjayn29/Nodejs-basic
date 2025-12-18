@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Contact from './pages/contact';
 import About from './pages/About';
 import Navbar from './pages/navbar';
+import AdminProtectedRoute from './pages/AdminProtectedRoute';
 import './App.css';
 
 // Simple Admin page placeholder
@@ -24,7 +25,11 @@ function AppLayout() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={
+          <AdminProtectedRoute>
+            <Dashboard />
+          </AdminProtectedRoute>
+        } />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
         <Route path="/home" element={<Home />} />
