@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>User Enter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      padding: 30px;
+    }
+
+    h1 {
+      color: #2563eb;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logout-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input,
+    button {
+      padding: 8px;
+      margin: 5px;
+    }
+
+    table {
+      margin-top: 20px;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: center;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h1>User Management</h1>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <input type="text" id="name" placeholder="Name">
+  <input type="number" id="age" placeholder="Age">
+  <button onclick="addUser()">Add User</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="usersTable"></tbody>
+  </table>
+
+  <script>
+    const API = "/users";
+
+    function checkAuth() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login.html';
+      }
+    }
+
+    // Check auth immediately
+    checkAuth();
+
+    function logout() {
+      localStorage.removeItem('token');
+      window.location.href = '/login.html';
+    }
+
+    async function loadUsers() {
+      // Pass token in headers if we were verifying it on backend middleware
+      // For now just basic requirement was login flow
+      const token = localStorage.getItem('token');
+      const res = await fetch(API, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+
+      if (res.status === 401) {
+        window.location.href = '/login.html';
+        return;
+      }
+
+      const users = await res.json();
+
+      const table = document.getElementById("usersTable");
+      table.innerHTML = "";
+
+      users.forEach(user => {
+        table.innerHTML += `
+          <tr>
+            <td>${user.id}</td>
+            <td>${user.name}</td>
+            <td>${user.age}</td>
+            <td>
+              <button onclick="deleteUser('${user.id}')">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function addUser() {
+      const name = document.getElementById("name").value;
+      const age = document.getElementById("age").value;
+
+      if (!name || !age) {
+        alert("Please enter name and age");
+        return;
+      }
+
+      await fetch(API, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ name, age })
+      });
+
+      document.getElementById("name").value = "";
+      document.getElementById("age").value = "";
+      loadUsers();
+    }
+
+    async function deleteUser(id) {
+      const token = localStorage.getItem('token');
+      await fetch(`${API}/${id}`, {
+        method: "DELETE",
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      loadUsers();
+    }
+
+    loadUsers();
+  </script>
+</body>
+
+</html>
