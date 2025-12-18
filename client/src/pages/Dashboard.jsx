@@ -51,7 +51,10 @@ const Dashboard = () => {
         <div style={{ padding: '20px' }}>
             <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h1>Dashboard</h1>
-                <button onClick={handleLogout} style={{ padding: '8px 16px', background: '#dc2626', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Logout</button>
+                <div>
+                    <button onClick={() => navigate('/home')} style={{ marginRight: '10px', padding: '8px 16px', background: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>My Tasks</button>
+                    <button onClick={handleLogout} style={{ padding: '8px 16px', background: '#dc2626', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Logout</button>
+                </div>
             </nav>
             <h3>{message}</h3>
 
@@ -82,4 +85,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Dashboard; 

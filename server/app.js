@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import User from "./models/User.js";
+import Todo from "./models/Todo.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import path from 'path';
@@ -19,18 +20,19 @@ const SECRET_KEY = "my_secret_key_123";
 
 const seedUser = async () => {
     try {
-        const exists = await User.findOne({ username: "sanjayn29" });
-        if (!exists) {
-            const hashedPassword = await bcrypt.hash("N.Sanjay@2005", 10);
-            await User.create({
+        const hashedPassword = await bcrypt.hash("N.Sanjay@2005", 10);
+        await User.findOneAndUpdate(
+            { username: "sanjayn29" },
+            {
                 username: "sanjayn29",
                 email: "sanjayn29@example.com",
                 password: hashedPassword,
                 name: "Sanjay",
                 dob: new Date("2005-01-01")
-            });
-            console.log("Default user created: sanjayn29");
-        }
+            },
+            { upsert: true, new: true }
+        );
+        console.log("Default user seeded/updated: sanjayn29");
     } catch (err) {
         console.error("Error seeding user:", err);
     }
@@ -77,7 +79,7 @@ app.post("/login", async (req, res) => {
             return res.status(400).json({ message: "Invalid username or password" });
         }
 
-        const token = jwt.sign({ id: user._id, username: user.username }, SECRET_KEY, { expiresIn: "1h" });
+        const token = jwt.sign({ id: user._id, username: user.username, email: user.email }, SECRET_KEY, { expiresIn: "1h" });
 
         res.json({ token, message: "Login successful" });
     } catch (error) {
@@ -156,6 +158,41 @@ app.delete("/users/:id", async (req, res) => {
         res.json({ message: "User deleted" });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+// Get Todos
+app.get("/todos", async (req, res) => {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
+    const token = authHeader.split(" ")[1];
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const todos = await Todo.find({ email: decoded.email });
+        res.json(todos);
+    } catch (error) {
+        res.status(401).json({ message: "Invalid token" });
+    }
+});
+
+// Create Todo
+app.post("/todos", async (req, res) => {
+    const authHeader = req.headers["authorization"];
+    if (!authHeader) return res.status(401).json({ message: "Unauthorized" });
+    const token = authHeader.split(" ")[1];
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const { task, status, priority, dueDate, notes } = req.body;
+        const todoData = {
+            email: decoded.email,
+            task, status, priority, notes
+        };
+        if (dueDate) todoData.dueDate = dueDate;
+
+        const newTodo = await Todo.create(todoData);
+        res.status(201).json(newTodo);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
     }
 });
 
