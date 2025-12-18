@@ -17,13 +17,11 @@ const Dashboard = () => {
             }
 
             try {
-                // Fetch Dashboard Message
                 const dashboardRes = await axios.get('http://localhost:3000/dashboard', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setMessage(dashboardRes.data.message);
 
-                // Fetch Users
                 const usersRes = await axios.get('http://localhost:3000/users', {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -60,9 +58,10 @@ const Dashboard = () => {
             <h2 style={{ marginTop: '20px' }}>User List</h2>
             <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '10px' }}>
                 <thead>
-                    <tr style={{ background: '#f3f4f6' }}>
+                    <tr style={{ background: '#5983d7ff' }}>
                         <th style={{ padding: '10px', border: '1px solid #ddd' }}>ID</th>
                         <th style={{ padding: '10px', border: '1px solid #ddd' }}>Name</th>
+                        <th style={{ padding: '10px', border: '1px solid #ddd' }}>Email</th>
                         <th style={{ padding: '10px', border: '1px solid #ddd' }}>DOB</th>
                     </tr>
                 </thead>
@@ -71,6 +70,7 @@ const Dashboard = () => {
                         <tr key={user.id || user._id}>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.id || user._id}</td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.name}</td>
+                            <td style={{ padding: '10px', border: '1px solid #ddd' }}>{user.email}</td>
                             <td style={{ padding: '10px', border: '1px solid #ddd' }}>
                                 {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}
                             </td>
