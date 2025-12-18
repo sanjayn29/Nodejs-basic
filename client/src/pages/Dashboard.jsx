@@ -45,6 +45,20 @@ const Dashboard = () => {
         navigate('/login');
     };
 
+
+    const handleDelete = async (id) => {
+        const token = localStorage.getItem('token');
+        if (!window.confirm('Are you sure you want to delete this user?')) return;
+        try {
+            await axios.delete(`http://localhost:3000/users/${id}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setUsers(users.filter(u => (u.id || u._id) !== id));
+        } catch (err) {
+            alert('Failed to delete user.');
+        }
+    };
+
     if (loading) return <div>Loading...</div>;
 
     return (
@@ -58,7 +72,7 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden transition-transform duration-200 hover:scale-[1.01] hover:shadow-blue-200">
                     <div className="p-6 border-b border-gray-100 bg-gray-50">
                         <h2 className="text-xl font-bold text-gray-800">Registered Users</h2>
                     </div>
@@ -71,6 +85,7 @@ const Dashboard = () => {
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
                                     <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">DOB</th>
+                                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-100">
@@ -93,6 +108,14 @@ const Dashboard = () => {
                                             <td className="px-6 py-4 text-sm text-gray-600">{user.email}</td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
                                                 {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}
+                                            </td>
+                                            <td className="px-6 py-4 text-sm">
+                                                <button
+                                                    className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs"
+                                                    onClick={() => handleDelete(user.id || user._id)}
+                                                >
+                                                    Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     ))

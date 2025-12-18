@@ -1,6 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+
 
 const Home = () => {
     const [task, setTask] = useState('');
@@ -9,6 +11,7 @@ const Home = () => {
     const [dueDate, setDueDate] = useState('');
     const [notes, setNotes] = useState('');
     const [todos, setTodos] = useState([]);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
     const fetchTodos = async () => {
@@ -25,8 +28,22 @@ const Home = () => {
         }
     };
 
+    const fetchUser = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        try {
+            // Decode token to get user id (payload: { id, username, email })
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const res = await axios.get(`http://localhost:3000/users/${payload.id}`);
+            setUser(res.data);
+        } catch (err) {
+            setUser(null);
+        }
+    };
+
     useEffect(() => {
         fetchTodos();
+        fetchUser();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -66,12 +83,24 @@ const Home = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-10">
             <div className="max-w-7xl mx-auto">
-                
+                {/* User Details Container */}
+                {user && (
+                    <div className="mb-8 p-6 bg-white rounded-2xl shadow-2xl border border-blue-100 flex flex-col md:flex-row gap-6 items-center transition-transform duration-200 hover:scale-[1.01] hover:shadow-blue-200">
+                        <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-400 to-purple-400 text-white flex items-center justify-center font-extrabold text-3xl shadow-lg">
+                            {user.name ? user.name.charAt(0).toUpperCase() : 'U'}
+                        </div>
+                        <div>
+                            <div className="text-2xl font-extrabold text-gray-800 mb-1">{user.name || user.username}</div>
+                            <div className="text-gray-600 font-medium">{user.email}</div>
+                            <div className="text-gray-500 text-sm mt-1">DOB: {user.dob ? new Date(user.dob).toLocaleDateString() : 'N/A'}</div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Add Task Form */}
                     <div className="lg:col-span-1">
-                        <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 sticky top-8">
+                        <div className="bg-white rounded-2xl shadow-2xl border border-blue-100 p-6 sticky top-8 transition-transform duration-200 hover:scale-[1.01] hover:shadow-blue-200">
                             <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
