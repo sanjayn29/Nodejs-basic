@@ -7,24 +7,7 @@ const About = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-10">
             <div className="max-w-4xl mx-auto">
-                {/* Navigation Bar */}
-                <nav className="flex justify-between items-center mb-10 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">About Us</h1>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => navigate('/home')}
-                            className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            Home
-                        </button>
-                        <button
-                            onClick={() => navigate('/contact')}
-                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            Contact
-                        </button>
-                    </div>
-                </nav>
+                
 
                 {/* Main Content */}
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">

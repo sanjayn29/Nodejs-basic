@@ -50,23 +50,7 @@ const Dashboard = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-10">
             <div className="max-w-7xl mx-auto">
-                <nav className="flex justify-between items-center mb-10 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Admin Dashboard</h1>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => navigate('/home')}
-                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            My Tasks
-                        </button>
-                        <button
-                            onClick={handleLogout}
-                            className="px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            Logout
-                        </button>
-                    </div>
-                </nav>
+                
 
                 {message && (
                     <div className="mb-8 p-4 bg-blue-50 text-blue-700 rounded-lg border border-blue-100 font-medium">

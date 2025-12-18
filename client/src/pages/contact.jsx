@@ -15,24 +15,7 @@ const Contact = () => {
     return (
         <div className="min-h-screen bg-gray-50 p-6 md:p-10">
             <div className="max-w-4xl mx-auto">
-                {/* Navigation Bar */}
-                <nav className="flex justify-between items-center mb-10 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">Contact Us</h1>
-                    <div className="flex gap-4">
-                        <button
-                            onClick={() => navigate('/home')}
-                            className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            Home
-                        </button>
-                        <button
-                            onClick={() => navigate('/about')}
-                            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors shadow-sm"
-                        >
-                            About
-                        </button>
-                    </div>
-                </nav>
+                
 
                 <div className="grid md:grid-cols-2 gap-8">
                     {/* Contact Info */}
