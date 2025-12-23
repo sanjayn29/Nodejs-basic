@@ -41,12 +41,12 @@ const Show = () => {
     }
 
     return (
-        <div className="max-w-2xl mx-auto p-5">
+        <div className="max-w-7xl mx-auto p-5">
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Global Todos Feed</h2>
             {todos.length === 0 ? (
                 <p className="text-gray-500 text-center">No todos found. Be the first to create one!</p>
             ) : (
-                <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     {todos.map((todo) => (
                         <div key={todo._id} className="bg-white rounded-xl p-4 shadow-md border border-gray-200">
                             <div className="flex justify-between items-center mb-3">
