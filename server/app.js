@@ -210,4 +210,22 @@ app.delete("/todos/:id", async (req, res) => {
     }
 });
 
+// Public endpoint to get all todos with user details (Instagram-style feed)
+app.get("/all-todos", async (req, res) => {
+    try {
+        const todos = await Todo.find().sort({ createdAt: -1 }); // Sort by newest first
+        const allTodosWithUser = [];
+        for (let todo of todos) {
+            const user = await User.findOne({ email: todo.email }, { name: 1, username: 1 });
+            allTodosWithUser.push({
+                ...todo.toObject(),
+                user: user ? { name: user.name, username: user.username } : null
+            });
+        }
+        res.json(allTodosWithUser);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 export default app;

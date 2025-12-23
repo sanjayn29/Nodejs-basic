@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Contact from './pages/contact';
 import About from './pages/About';
 import Navbar from './pages/navbar';
+import Show from './pages/show';
 import AdminProtectedRoute from './pages/AdminProtectedRoute';
 import './App.css';
 
@@ -31,6 +32,7 @@ function AppLayout() {
           </AdminProtectedRoute>
         } />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/show" element={<Show />} />
         <Route path="/about" element={<About />} />
         <Route path="/home" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
